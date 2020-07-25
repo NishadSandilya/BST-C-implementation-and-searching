@@ -1,0 +1,82 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+typedef struct tree{
+    int data;
+    struct tree*left;
+    struct tree*right;
+}tree;
+tree*new_node(){
+    return malloc(sizeof(tree));
+}
+tree*create_root(int data){
+    tree*new_element=new_node();
+    new_element->data=data;
+    new_element->left=NULL;
+    new_element->right=NULL;
+    return new_element;
+}
+void insert(tree*root, int data){
+    if(root->data>data){
+        if(root->left==NULL){
+            tree*child_left=new_node();
+            child_left->data=data;
+            child_left->left=NULL;
+            child_left->right=NULL;
+            root->left=child_left;
+        }
+        else
+            insert(root->left,data);
+    }
+    else{
+        if(root->right==NULL){
+            tree*child_right=new_node();
+            child_right->data=data;
+            child_right->left=NULL;
+            child_right->right=NULL;
+            root->right=child_right;
+        }
+        else
+            insert(root->right,data);
+    }
+}
+void print(tree*root){
+    if(root==NULL)
+    return;
+    else{
+        print(root->left);
+        printf("%d ", root->data);
+        print(root->right);
+    }
+}
+bool find(tree*root, int data){
+    if(root==NULL)
+    return false;
+    else{
+        if(root->data==data)
+            return true;
+        if(root->data>data)
+            find(root->left,data);
+        else
+            find(root->right,data);
+    }
+}
+int main() {
+    tree*root=NULL;
+    int n;
+    scanf("%d", &n);
+    while(n--){
+        int data;
+        scanf("%d", &data);
+        if(root==NULL)
+            root=create_root(data);
+        else
+            insert(root,data);
+    }
+    print(root);
+    printf("\n");
+    int key;
+    scanf("%d", &key);
+    printf("%s", (find(root,key)==0)?"NOT FOUND":"FOUND");
+    return 0;
+}
